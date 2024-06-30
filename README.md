@@ -1,2 +1,23 @@
-# dsa-cheatsheet
-DSA topics, algorithms, patterns and many more, in Python.
+# DSA Sheet for Code Revision.
+
+Topics Covered:
+1. [Two Pointers/Sliding Window]()
+2. [LinkedList]()
+3. [Stack]()
+4. [Monotonic Stack]()
+5. [Monotonic Queue]()
+6. [Prefix Sum]()
+7. [Matrix]()
+8. [HashMap, Set]()
+9. [Backtracking]()
+10. [Interval Algorithms]()
+11. [Heap]()
+12. [Binary Search]() 
+13. [Tree/Binary Tree]()
+14. [Binary Search Tree]()
+15. [Bit Manipulation]()
+16. [Graph- Shortest Path]()
+17. [Graph- MST]()
+18. [Graph- Traversal]()
+19. [Graph- Advanced]()
+20. [Dynamic Programming]()
