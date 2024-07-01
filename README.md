@@ -1,6 +1,5 @@
 # DSA Sheet for Code Revision.
 
-Topics Covered:
 1. [Two Pointers/Sliding Window]()
 2. [LinkedList]()
 3. [Stack]()
