@@ -1,7 +1,7 @@
 # DSA Sheet for Code Revision.
 
-1. [Two Pointers/Sliding Window](sheet.md)
-2. [LinkedList]()
+1. [Two Pointers/Sliding Window](twopointers-slidingwindow.md)
+2. [LinkedList](linkedlist.md)
 3. [Stack]()
 4. [Monotonic Stack]()
 5. [Monotonic Queue]()
