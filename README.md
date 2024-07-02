@@ -20,3 +20,5 @@
 18. [Graph- Traversal]()
 19. [Graph- Advanced]()
 20. [Dynamic Programming]()
+
+Pseudo Algorithms and Concepts: [Link](other-algo.md)
