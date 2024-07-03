@@ -10,7 +10,7 @@
 8. [HashMap, Set]()
 9. [Backtracking]()
 10. [Interval Algorithms]()
-11. [Heap]()
+11. [Heap](heap.md)
 12. [Binary Search]() 
 13. [Tree/Binary Tree]()
 14. [Binary Search Tree]()
