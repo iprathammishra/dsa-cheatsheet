@@ -1,6 +1,6 @@
 # LinkedList
 
-## Reveral of LinkedList
+## Reversal of LinkedList
 
 ```python
 
