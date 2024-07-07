@@ -11,7 +11,7 @@
 9. ✅ [Heap](heap.md)
 10. ✅ [Binary Search](binary-search.md) 
 11. [Tree/Binary Tree]()
-12. [Bit Manipulation]()
+12. ✅ [Bit Manipulation](bit.md)
 13. [Graph]()
 14. [Dynamic Programming]()
 

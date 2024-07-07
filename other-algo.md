@@ -109,6 +109,10 @@ class UnionFind:
 
 ```
 
+# Prims
+
+# Kruskal
+
 # Dijkstra's Algorithm
 
 # Bellman Ford Algorithm
@@ -136,3 +140,14 @@ def sieve(n):
     return primes
 
 ```
+
+# Longest Increasing Subsequence
+
+# Longest Common Subsequence
+
+# Ancestor in Graph
+
+# Ancestor in Tree
+
+# Lowest Common Ancestor
+
