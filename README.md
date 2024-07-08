@@ -12,7 +12,7 @@
 10. ✅ [Binary Search](binary-search.md) 
 11. ✅ [Tree/Binary Tree](tree.md)
 12. ✅ [Bit Manipulation](bit.md)
-13. [Graph]()
-14. [Dynamic Programming]()
+13. ✅ [Graph](graph.md)
+14. ✅ [Dynamic Programming](dp.md)
 
-Pseudo Algorithms and Concepts: [Link](other-algo.md)
+🎧 Pseudo Algorithms and Concepts: [Link](other-algo.md)
