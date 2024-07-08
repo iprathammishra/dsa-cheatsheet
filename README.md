@@ -10,7 +10,7 @@
 8. ✅ [Interval Algorithms](interval-algo.md)
 9. ✅ [Heap](heap.md)
 10. ✅ [Binary Search](binary-search.md) 
-11. [Tree/Binary Tree]()
+11. ✅ [Tree/Binary Tree](tree.md)
 12. ✅ [Bit Manipulation](bit.md)
 13. [Graph]()
 14. [Dynamic Programming]()
