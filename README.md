@@ -14,5 +14,6 @@
 12. ✅ [Bit Manipulation](bit.md)
 13. ✅ [Graph](graph.md)
 14. ✅ [Dynamic Programming](dp.md)
+15. ✅ [Patterns to Revise](patterns.md)
 
 🎧 Pseudo Algorithms and Concepts: [Link](other-algo.md)
