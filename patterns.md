@@ -307,51 +307,45 @@ How it Works:
 Time complexity is O(NlogN) where N is the number of nodes and because we sorted it.
 
 ```py 
-from collections import defaultdict, deque
-
-def vertical_traversal(root):
-    if not root:
-        return []
-
-    # Dictionary to hold nodes per column: {column: [(row, value)]}
-    col_dict = defaultdict(list)
-    queue = deque([(root, 0, 0)])  # (node, column, row)
-
-    # BFS traversal
-    while queue:
-        node, col, row = queue.popleft()
-        col_dict[col].append((row, node.val))
-        
-        if node.left:
-            queue.append((node.left, col - 1, row + 1))
-        if node.right:
-            queue.append((node.right, col + 1, row + 1))
-
-    # Sort columns and each column's nodes by row, then by value
-    result = []
-    for col in sorted(col_dict.keys()):
-        column_nodes = sorted(col_dict[col], key=lambda x: (x[0], x[1]))
-        result.append([val for _, val in column_nodes])
-
-    return result
-
-# Example usage
 class TreeNode:
     def __init__(self, val=0, left=None, right=None):
         self.val = val
         self.left = left
         self.right = right
 
-# Constructing example tree
-root = TreeNode(1)
-root.left = TreeNode(2)
-root.right = TreeNode(3)
-root.left.left = TreeNode(4)
-root.left.right = TreeNode(5)
-root.right.left = TreeNode(6)
-root.right.right = TreeNode(7)
+def binary_tree_to_bst(root):
+    # Step 1: Inorder traversal to collect values
+    def inorder_traversal(node, nodes):
+        if node:
+            inorder_traversal(node.left, nodes)
+            nodes.append(node.val)
+            inorder_traversal(node.right, nodes)
 
-print(vertical_traversal(root))  # Output: [[4], [2], [1, 5, 6], [3], [7]]
+    # Step 2: Replace node values with sorted list
+    def inorder_replace(node, sorted_vals):
+        if node:
+            inorder_replace(node.left, sorted_vals)
+            node.val = next(sorted_vals)
+            inorder_replace(node.right, sorted_vals)
+
+    # Collect all values, sort, and reassign
+    values = []
+    inorder_traversal(root, values)
+    sorted_values = iter(sorted(values))
+    inorder_replace(root, sorted_values)
+    return root
+
+# Example usage
+# Constructing example binary tree
+root = TreeNode(10)
+root.left = TreeNode(2)
+root.right = TreeNode(7)
+root.left.left = TreeNode(8)
+root.left.right = TreeNode(4)
+
+binary_tree_to_bst(root)
+# After conversion, the tree should now satisfy BST properties
+
 
 ```
 
