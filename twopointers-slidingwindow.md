@@ -455,6 +455,7 @@ print(result)  # Output: [(1, 5), (2, 4), (3, 3)]
 Problem: Reverse a string using two pointers.
 
 Approach:
+
 - Use two pointers: one starting at the beginning (left) and one at the end (right).
 - Swap characters while moving left forward and right backward until they cross each other.
 
@@ -478,9 +479,245 @@ print("".join(s))  # Output: "olleh"
 Problem: Remove duplicates in a sorted array and return the new length.
 
 Approach:
+
 - Use a slow pointer (i) to track the unique elements in the array and a fast pointer (j) to iterate over the array.
 - When a new unique element is found, move i and replace nums[i] with the new unique element at nums[j].
 
+Time Complexity: O(n), where n is the size of the array.
 
+Example:
 
+```py
+nums = [1, 1, 2, 2, 3]
+i = 0
+for j in range(1, len(nums)):
+    if nums[j] != nums[i]:
+        i += 1
+        nums[i] = nums[j]
+print(i + 1)  # Output: 3 (unique elements: [1, 2, 3])
+
+```
+
+**Valid Palindrome**
+
+Problem: Check is a string is a palindrome, considering only alphanumeric characters and ignoring case.
+
+Approach: 
+
+- Use two pointers: one at the start and one at the end.
+- Skip non-alphanumeric characters and check if the characters at the two pointers and equal, moving the pointers toward the center.
+
+Time Complexity: O(n), where n is the length of the string.
+
+Example:
+
+```py
+s = "A man, a plan, a canal, Panama"
+s = ''.join([c.lower() for c in s if c.isalnum()])
+left, right = 0, len(s) - 1
+while left < right:
+    if s[left] != s[right]:
+        print(False)
+        return
+    left += 1
+    right -= 1
+print(True)  # Output: True
+
+```
+
+# Medium Level
+
+**Find Subarray with Sum Equals to Target**
+
+Problem: Given an array and a target sum, find a contiguous subarray whose sum is equal to the target.
+
+Approach:
+
+- Use a sliding window (or prefix sum) approach to track the sum of elements in the current window.
+- If the sum exceeds the target, shrink the window from the left.
+
+Time Complexity: O(n), where n is the size of the array.
+
+Example:
+
+```py
+nums = [1, 2, 3, 7, 5]
+target = 12
+current_sum = 0
+left = 0
+for right in range(len(nums)):
+    current_sum += nums[right]
+    while current_sum > target:
+        current_sum -= nums[left]
+        left += 1
+    if current_sum == target:
+        print(True)
+        return
+print(False)  # Output: True
+```
+
+**Longest Substring Without Repeating Characters**
+
+Problem: Find the length of the longest substring with no repeating characters.
+
+Approach:
+
+- Use a sliding window with two pointers: left and right. Expand the window by moving right, and contract it by moving left when a duplicate character is found.
+- Keep track of characters in a set to quickly check for duplicates.
+
+Time Complexity: O(n), where n is the length of the string.
+
+Example:
+
+```py
+s = "abcabcbb"
+char_set = set()
+left, result = 0, 0
+for right in range(len(s)):
+    while s[right] in char_set:
+        char_set.remove(s[left])
+        left += 1
+    char_set.add(s[right])
+    result = max(result, right - left + 1)
+print(result)  # Output: 3 (longest substring: "abc")
+```
+
+**Minimum Window Substring**
+
+Problem: Find the minimum window in string s that contains all characters from string t.
+
+Approach:
+
+- Use a sliding window approach with two pointers. Expand the window by moving the right pointer, and when all characters from t are included, try to shrink the window by moving the left pointer.
+- Use a frequency map for string t and track the count of characters in the current window.
+
+Time complexity: O(n), where n is the length of string s.
+
+Example:
+
+```py
+s = "ADOBECODEBANC"
+t = "ABC"
+from collections import Counter
+t_freq = Counter(t)
+s_freq = Counter()
+left, right = 0, 0
+min_len = float('inf')
+min_substr = ""
+while right < len(s):
+    s_freq[s[right]] += 1
+    while all(s_freq[char] >= t_freq[char] for char in t_freq):
+        if right - left + 1 < min_len:
+            min_len = right - left + 1
+            min_substr = s[left:right+1]
+        s_freq[s[left]] -= 1
+        left += 1
+    right += 1
+print(min_substr)  # Output: "BANC"
+
+```
+
+# Hard Level
+
+**Longest Subarray with At Most K Distinct Characters**
+
+Problem: Find the length of the longest subarray that contains at most k distinct characters.
+
+Approach:
+
+- Use a sliding window where you expand the window by moving the right pointer. If the number of distinct characters exceeds k, shrink the window by moving the left pointer.
+- Use a dictionary to track the count of characters in the window.
+
+Time Complexity: O(n), where n is the length of the string.
+
+Example:
+
+```py
+s = "eceba"
+k = 2
+from collections import defaultdict
+char_count = defaultdict(int)
+left, max_len = 0, 0
+for right in range(len(s)):
+    char_count[s[right]] += 1
+    while len(char_count) > k:
+        char_count[s[left]] -= 1
+        if char_count[s[left]] == 0:
+            del char_count[s[left]]
+        left += 1
+    max_len = max(max_len, right - left + 1)
+print(max_len)  # Output: 3 (longest substring: "ece")
+
+```
+
+**Substring with Concatenation of All Words**
+
+Problem: Find all starting indices of substrings in s that are a concatenation of each word in *words* exactly once.
+
+Approach:
+
+- Use a sliding window to check for substrings of size len(words)*len(word) where all words from *words* are present exactly once. Use a hash map to track the frequency of words in the substring.
+
+Time Complexity: O(n*m), where n is the length of string s and m is the length of each word.
+
+Example:
+
+```py
+s = "barfoothefoobarman"
+words = ["foo", "bar"]
+word_len = len(words[0])
+word_count = Counter(words)
+result = []
+for i in range(word_len):
+    left, right = i, i
+    current_count = defaultdict(int)
+    while right + word_len <= len(s):
+        word = s[right:right + word_len]
+        right += word_len
+        if word in word_count:
+            current_count[word] += 1
+            while current_count[word] > word_count[word]:
+                current_count[s[left:left + word_len]] -= 1
+                left += word_len
+            if right - left == len(words) * word_len:
+                result.append(left)
+        else:
+            current_count.clear()
+            left = right
+print(result)  # Output: [0, 9]
+
+```
+
+**Count of Substrings with Exactly K Distinct Characters**
+
+Problem: Count the number of substrings in s with exactly k distinct characters.
+
+Approach:
+
+- Use a helper function to count substrings with at most k distinct characters. The result for exactly k distinct characters can be obtained by calculating:
+    - count(at most k) - count(at most k-1)
+
+Time Complexity: O(n), where n is the length of the string.
+
+Example:
+
+```py
+s="abcba"
+k = 2
+def at_most_k(s, k):
+    from collections import defaultdict
+    char_count = defaultdict(int)
+    left, result = 0, 0
+    for right in range(len(s)):
+        char_count[s[right]] += 1
+        while len(char_count) > k:
+            char_count[s[left]] -= 1
+            if char_count[s[left]] == 0:
+                del char_count[s[left]]
+            left += 1
+        result += right - left + 1
+    return result
+print(at_most_k(s, k) - at_most_k(s, k - 1))
+
+```
 
