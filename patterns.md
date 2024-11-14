@@ -378,3 +378,79 @@ class Solution:
         
         return res
 ```
+
+## Insights.
+
+1. While thinking about a solution for a 2D DP problem. Think about sequences. Think about what dp[i][j] will actually represent at a certain state. Preaprocess dp or prepare the base case according to the problem statement. Then, for other states think about how dp[(i-1,j) or (i,j-1) or (i-1,j-1)] will affect your current dp[i][j] state.
+2. **IMP** To find the distance between two nodes in the tree. Just find **LCA** of those two nodes and then you can use BFS to get the distance (or depth) of the nodes. Add the depths and you have the **minimum distance between two nodes in a tree**.
+3. **IMP** Palindrome Partioning can be easily solved with backtracking.
+4. **IMP** LRU Cache can be solved with hashmaps to store the most recent key along with Doubly Linked-List for updating the values for the hashmaps.
+5. Custom sort function works a little different in python. Firstly, it has to be imported from functools as cmp_to_key and then can be used as arr.sort(key=cmp_to_key(function-name)). Inside the function-name you have to give 2 parameters like a and b that is used for comparison purposes. This function understand two different int returns. If it returns -1 that means put a before b and if it returns 1 then put a after b.
+6. **IMP** Always try to check and implement the prefix sum angle for questions that ask for consecutive sum or consecutive action in an array.
+7. While counting pairs. To count all the valid pairs between left and right pointers just simpily add (right-left)+-1 to the result variable. Mostly applicable if the array is sorted in some way.
+
+## LRU Cache
+
+Least recently used cache.
+
+The intuition is to maintain a fixed-size cache of key-value pairs using a doubly linked list and an unordered map. When accessing or adding a key-value pair, it moves the corresponding node to the front of the linked list, making it the most recently used item. This way, the least recently used item is always at the end of the list. When the cache is full and a new item is added, it removes the item at the end of the list (least recently used) to make space for the new item, ensuring the LRU property is maintained.
+
+```py
+class LRUCache:
+    class Node:
+        def __init__(self, key, val):
+            self.key=key
+            self.val=val
+            self.prev=None
+            self.next=None
+
+    def __init__(self, capacity: int):
+        self.cap=capacity
+        self.head=self.Node(-1,-1)
+        self.tail=self.Node(-1,-1)
+        self.head.next=self.tail
+        self.tail.prev=self.head
+        self.mp={}
+    
+    def add(self, node):
+        temp=self.head.next
+        node.next=temp
+        node.prev=self.head
+        self.head.next=node
+        temp.prev=node
+    
+    def delete(self,node):
+        prevv=node.prev
+        nextt=node.next
+        prevv.next=nextt
+        nextt.prev=prevv
+
+    def get(self, key: int) -> int:
+        if key in self.mp:
+            node=self.mp[key]
+            ans=node.val
+            del self.mp[key]
+            self.delete(node)
+            self.add(node)
+            self.mp[key]=self.head.next
+            return ans
+        return -1
+
+    def put(self, key: int, value: int) -> None:
+        if key in self.mp:
+            curr=self.mp[key]
+            del self.mp[key]
+            self.delete(curr)
+        if len(self.mp)==self.cap:
+            del self.mp[self.tail.prev.key]
+            self.delete(self.tail.prev)
+        self.add(self.Node(key,value))
+        self.mp[key]=self.head.next
+
+# Your LRUCache object will be instantiated and called as such:
+# obj = LRUCache(capacity)
+# param_1 = obj.get(key)
+# obj.put(key,value)
+```
+
+
