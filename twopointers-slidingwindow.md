@@ -418,3 +418,69 @@ def two_sum_sorted(nums, target):
     return []
 
 ```
+
+Here are 10 questions, ranging from easy to hard. These will help to build a solid foundation and tackle problems from simple to complex.
+
+# Easy Level
+
+**Find All Pairs with a Given Sum in an Array**
+
+Problem: Given an array of integers and a target sum, return all pairs of numbers from the array whose sum is equal to the target.
+
+Approach:
+
+-  Use a hashset to store the elements you've already seen while iterating through the array.
+- For each number x, check if target - x is already in the set. If so, you've found a pair.
+- This ensures each pair is counted only once.
+
+Time Complexity: O(n), where n is the size of the array.
+
+Example:
+
+```py
+nums = [1, 2, 3, 4, 3, 5]
+target = 6
+seen = set()
+result = []
+for num in nums:
+    complement = target - num
+    if complement in seen:
+        result.append((complement, num))
+    seen.add(num)
+print(result)  # Output: [(1, 5), (2, 4), (3, 3)]
+```
+
+**Reverse String**
+
+Problem: Reverse a string using two pointers.
+
+Approach:
+- Use two pointers: one starting at the beginning (left) and one at the end (right).
+- Swap characters while moving left forward and right backward until they cross each other.
+
+Time Complexity: O(n), where n is the length of the string.
+
+Example:
+
+```py
+s = "hello"
+s = list(s)  # Convert to list to mutate
+left, right = 0, len(s) - 1
+while left < right:
+    s[left], s[right] = s[right], s[left]
+    left += 1
+    right -= 1
+print("".join(s))  # Output: "olleh"
+```
+
+**Remove Duplicates from Sorted Array**
+
+Problem: Remove duplicates in a sorted array and return the new length.
+
+Approach:
+- Use a slow pointer (i) to track the unique elements in the array and a fast pointer (j) to iterate over the array.
+- When a new unique element is found, move i and replace nums[i] with the new unique element at nums[j].
+
+
+
+

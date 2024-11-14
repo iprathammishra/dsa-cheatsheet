@@ -382,6 +382,7 @@ class Solution:
 5. Custom sort function works a little different in python. Firstly, it has to be imported from functools as cmp_to_key and then can be used as arr.sort(key=cmp_to_key(function-name)). Inside the function-name you have to give 2 parameters like a and b that is used for comparison purposes. This function understand two different int returns. If it returns -1 that means put a before b and if it returns 1 then put a after b.
 6. **IMP** Always try to check and implement the prefix sum angle for questions that ask for consecutive sum or consecutive action in an array.
 7. While counting pairs. To count all the valid pairs between left and right pointers just simpily add (right-left)+-1 to the result variable. Mostly applicable if the array is sorted in some way.
+8. **IMP** For questions involving in-place actions. Think of write-index or swapping.
 
 ## LRU Cache
 
