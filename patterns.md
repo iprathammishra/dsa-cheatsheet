@@ -448,4 +448,46 @@ class LRUCache:
 # obj.put(key,value)
 ```
 
+## Insights.
+
+1. **IMP** LPS (Longest Prefix Suffix) array is the heart of KMP algorithm and here's how it works. Create the lps array and initialize it like that `lps = [0]*len(pattern)` now create two pointers i and j and i must point to the 0th index of the lps array that must always hold value as 0 (`lps[0]==0`) and j must points towards the 1st index of the lps array. Check if in the word `word[i] == word[j]` if its not true increase the j pointer by 1 and compare it again. The moment it is true change the value at lps[j] with i+1 and increament i by 1. Continue to do that. Again, if `word[i] != word[j]` and i>0 you must go to pointer i. Check the value of lps[i] and make i pointer equal to lps[i]th position and check if that is equal to word[j] if not put 0 and continue the process with i pointer equal that index only. 
+2. While using hashmap with prefix sum. We store the prefix sum in map when we want to get the subarrays that are equal to/for some condition- generally we initialize the mp as `mp={0:1}`. We use remainder in maps when we want to deal with the indexes for some conditions. We either don't initialize the mp for them or intialize them with `mp={0:-1}` generally.
+3. **IMP** Heaps in python works a little different. They are stored and compared in the tuple structure for example (x,y,z). For example if we have two values as (x1,y1,z1) and (x2,y2,z2) and x1==x2 then the comparator function in heap will compare the y1 and y2 values as default values. This method can be seen in action with question **Merge K sorted Linked List** where we store (value of the node, id of the node, and node) in the heap for sorting.
+4. **IMP** Whenever you're asked to create a deep copy of a linked list they are asking you to create new nodes and and creating next end points to within new nodes. In short deep copy of linked list == creating new nodes and referencing them.
+5. **IMP** Word Search can be solved using backtracking. Insight here is that whenever we fail to create logic for visited set in the recursion it is best to opt for a backtracking approach instead. 
+
+## Knapsack Patterns
+
+There are basically 3 types of knapsack patterns. They are the **0/1 Knapsack** problem where we are allowed to choose an item only 1 or 0 times. The **Bounded Knapsack** problem where we are allowed to choose an item within a certain limit/bound. And, lastly the **Unbounded Knapsack** problem where we are allowed to choose an item as many times as we want. 
+
+Below is how you should approach the 0/1 Knapsack problem.
+
+For similicity lets start with the 2D DP solution. dp[N+1][W+1] represents the maximum profit with N+1 items within W+1 weight. Here, N represents the number of items and W represents the capacity of the bag.
+
+Below is the recursive solution to get started with.
+
+```py
+def f(wt,profit,w,n):
+    if w===0 or n===0:
+        return 0
+    if wt[n]>w:
+        return f(wt,profit,w,n-1)
+    else:
+        return max(f(wt,profit,w,n-1), profit[n]+f(wt,profit,w-wt[n],n-1))
+```
+
+Similarly, here is the optimized code:
+
+```py
+for i in range(N+1):
+    for j in range(W+1):
+        if i==0 or j==0:
+            dp[i][j]=0
+        elif wt[i-1]>j:
+            dp[i][j]=dp[i-1][j]
+        else:
+            dp[i][j]=max(dp[i-1][j], profit[i-1]+dp[i-1][w-wt[i-1]])
+```
+
+A useful insights for DP questions is that- once you know how to code the recursive solution it gets fairly easy to convert the recursive solution to a memoized solution and with experience you can convert that memoized solution to tabulation approach as well. Basically, getting the recursive solution is more important and should be thought first before even jumping towards tabulation DP.
 
