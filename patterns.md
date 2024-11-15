@@ -375,7 +375,7 @@ class Solution:
 
 ## Insights.
 
-1. While thinking about a solution for a 2D DP problem. Think about sequences. Think about what dp[i][j] will actually represent at a certain state. Preaprocess dp or prepare the base case according to the problem statement. Then, for other states think about how dp[(i-1,j) or (i,j-1) or (i-1,j-1)] will affect your current dp[i][j] state.
+1. While thinking about a solution for a 2D DP problem. Think about sequences. Think about what dp[i][j] will actually represent at a certain state. Preprocess dp or prepare the base case according to the problem statement. Then, for other states think about how dp[(i-1,j) or (i,j-1) or (i-1,j-1)] will affect your current dp[i][j] state.
 2. **IMP** To find the distance between two nodes in the tree. Just find **LCA** of those two nodes and then you can use BFS to get the distance (or depth) of the nodes. Add the depths and you have the **minimum distance between two nodes in a tree**.
 3. **IMP** Palindrome Partioning can be easily solved with backtracking.
 4. **IMP** LRU Cache can be solved with hashmaps to store the most recent key along with Doubly Linked-List for updating the values for the hashmaps.
