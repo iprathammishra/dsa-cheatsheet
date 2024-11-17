@@ -488,3 +488,360 @@ n = 2
 print(count_arrangement(n))
 
 ```
+
+Here are 10 backtracking problems ranging from easy to hard, with detailed explanations of the problem, pattern, approach, and code:
+
+**Generate All Subsets**
+
+Pattern: Subset Generation
+
+Problem: Given a set of distinct integers, return all possible subsets.
+
+Approach:
+
+- Use backtracking to explore the inclusion or exclusion of each element.
+- At each recursive step, add the current subset to the result.
+
+```py
+def subsets(nums):
+    result = []
+
+    def backtrack(start, current):
+        result.append(current[:])  # Add the current subset
+        for i in range(start, len(nums)):
+            current.append(nums[i])  # Include nums[i]
+            backtrack(i + 1, current)  # Explore further
+            current.pop()  # Exclude nums[i]
+
+    backtrack(0, [])
+    return result
+
+print(subsets([1, 2, 3]))  # Output: [[], [1], [1, 2], [1, 2, 3], [1, 3], [2], [2, 3], [3]]
+```
+
+**Permutations**
+
+Pattern: Permutation Generation
+
+Problem: Given a list of numbers, return all possible permutations.
+
+Approach:
+
+- Swap elements to fix the first position, then recursively permute the remaining elements.
+
+```py
+def permute(nums):
+    result = []
+
+    def backtrack(start):
+        if start == len(nums):
+            result.append(nums[:])  # Add the current permutation
+        for i in range(start, len(nums)):
+            nums[start], nums[i] = nums[i], nums[start]  # Swap
+            backtrack(start + 1)  # Recurse
+            nums[start], nums[i] = nums[i], nums[start]  # Backtrack
+
+    backtrack(0)
+    return result
+
+print(permute([1, 2, 3]))  # Output: [[1, 2, 3], [1, 3, 2], ..., [3, 2, 1]]
+
+```
+
+**Combination Sum**
+
+Pattern: Combination Generation with Constraints.
+
+Problem: Find all unique combinations of numbers that sum up to a target.
+
+Approach:
+
+- Use backtracking to explore combinations.
+- Skip the current number after picking it to avoid duplicates.
+
+```py
+def combination_sum(candidates, target):
+    result = []
+
+    def backtrack(start, remaining, current):
+        if remaining == 0:
+            result.append(current[:])  # Add valid combination
+            return
+        if remaining < 0:
+            return
+
+        for i in range(start, len(candidates)):
+            current.append(candidates[i])  # Include candidates[i]
+            backtrack(i, remaining - candidates[i], current)  # Allow reuse
+            current.pop()  # Backtrack
+
+    backtrack(0, target, [])
+    return result
+
+print(combination_sum([2, 3, 6, 7], 7))  # Output: [[2, 2, 3], [7]]
+
+```
+
+**N-Queens Problem**
+
+Pattern: Constraint Satisfaction Problem
+
+Problem: Place n queens on an n x x chessboard so no two queens threaten each other.
+
+Approach:
+
+- Use backtracking to place queens row by row.
+- Check constraints for column, diagonal, and anti-diagonal conflicts.
+
+```py
+def solve_n_queens(n):
+    result = []
+    board = [["."] * n for _ in range(n)]
+
+    def is_safe(row, col):
+        for i in range(row):
+            if board[i][col] == "Q" or \
+               (col - (row - i) >= 0 and board[i][col - (row - i)] == "Q") or \
+               (col + (row - i) < n and board[i][col + (row - i)] == "Q"):
+                return False
+        return True
+
+    def backtrack(row):
+        if row == n:
+            result.append(["".join(r) for r in board])  # Add board configuration
+            return
+        for col in range(n):
+            if is_safe(row, col):
+                board[row][col] = "Q"  # Place queen
+                backtrack(row + 1)  # Recurse to the next row
+                board[row][col] = "."  # Backtrack
+
+    backtrack(0)
+    return result
+
+print(solve_n_queens(4))
+# Output: [['.Q..', '...Q', 'Q...', '..Q.'], ...]
+
+```
+
+**Sudoku Solver**
+
+Pattern: Constraint Satisfaction with Pruning.
+
+Problem: Solve a 9 x 9 Sudoku puzzle.
+
+Approach:
+
+- Use backtracking to fill empty cells.
+- Check row, column, and 3x3 subgrid constraints.
+
+```py
+def solve_sudoku(board):
+    def is_valid(num, row, col):
+        for i in range(9):
+            if board[row][i] == num or board[i][col] == num or \
+               board[row - row % 3 + i // 3][col - col % 3 + i % 3] == num:
+                return False
+        return True
+
+    def backtrack():
+        for i in range(9):
+            for j in range(9):
+                if board[i][j] == ".":
+                    for num in map(str, range(1, 10)):
+                        if is_valid(num, i, j):
+                            board[i][j] = num
+                            if backtrack():
+                                return True
+                            board[i][j] = "."  # Backtrack
+                    return False
+        return True
+
+    backtrack()
+
+board = [["5", "3", ".", ".", "7", ".", ".", ".", "."], ...]
+solve_sudoku(board)
+print(board)  # Output: Solved Sudoku
+
+```
+
+**Word Search**
+
+Pattern: Pathfinding with Backtracking.
+
+Problem: Determine if a word exists in a grid by moving in adjacent cells.
+
+Approach:
+
+- Use backtracking to explore all possible paths for forming the word.
+- Mark cells as visited during the recursion and restore them during backtracking.
+
+```py
+def exist(board, word):
+    rows, cols = len(board), len(board[0])
+
+    def backtrack(r, c, index):
+        if index == len(word):  # Word is completely matched
+            return True
+        if r < 0 or r >= rows or c < 0 or c >= cols or board[r][c] != word[index]:
+            return False
+
+        temp, board[r][c] = board[r][c], "#"  # Mark the cell as visited
+        found = (backtrack(r + 1, c, index + 1) or
+                 backtrack(r - 1, c, index + 1) or
+                 backtrack(r, c + 1, index + 1) or
+                 backtrack(r, c - 1, index + 1))
+        board[r][c] = temp  # Restore the cell
+        return found
+
+    for r in range(rows):
+        for c in range(cols):
+            if board[r][c] == word[0] and backtrack(r, c, 0):
+                return True
+    return False
+
+board = [["A", "B", "C", "E"], ["S", "F", "C", "S"], ["A", "D", "E", "E"]]
+word = "ABCCED"
+print(exist(board, word))  # Output: True
+
+```
+
+**Rat in a Maze**
+
+Problem: Given a maze represented by a binary matrix, find all paths from the top-left corner to the bottom-right corner. You can move in all four directions.
+
+Approach:
+
+- Use backtracking to explore all possible directions.
+- Maintain a visited matrix to prevent revisiting cells.
+
+```py
+def rat_in_maze(maze):
+    n = len(maze)
+    result = []
+    path = []
+    directions = [(1, 0, 'D'), (0, -1, 'L'), (0, 1, 'R'), (-1, 0, 'U')]
+
+    def backtrack(r, c):
+        if r == n - 1 and c == n - 1:  # Reached the destination
+            result.append("".join(path))
+            return
+
+        for dr, dc, move in directions:
+            nr, nc = r + dr, c + dc
+            if 0 <= nr < n and 0 <= nc < n and maze[nr][nc] == 1:
+                maze[r][c] = -1  # Mark as visited
+                path.append(move)
+                backtrack(nr, nc)
+                path.pop()
+                maze[r][c] = 1  # Backtrack
+
+    if maze[0][0] == 1:
+        backtrack(0, 0)
+    return result
+
+maze = [[1, 0, 0, 0], [1, 1, 0, 1], [0, 1, 0, 0], [1, 1, 1, 1]]
+print(rat_in_maze(maze))  # Output: ['DDRDRR', 'DRDDRR']
+
+```
+
+**Generate Parentheses**
+
+Problem: Generate all combinations of well-formed parentheses for n pairs.
+
+Approach:
+
+- Use backtracking with constraints:
+    - Add an open parenthesis if it's allowed.
+    - Add a close parenthesis only if it doesn't exceed the count of open parentheses.
+
+```py
+def generate_parentheses(n):
+    result = []
+
+    def backtrack(open_count, close_count, current):
+        if open_count == close_count == n:
+            result.append(current)
+            return
+
+        if open_count < n:
+            backtrack(open_count + 1, close_count, current + "(")
+        if close_count < open_count:
+            backtrack(open_count, close_count + 1, current + ")")
+
+    backtrack(0, 0, "")
+    return result
+
+print(generate_parentheses(3))  # Output: ['((()))', '(()())', '(())()', '()(())', '()()()']
+
+```
+
+**Palindrome Partitioning**
+
+Problem: Partition a string such that every substring is a palindrome.
+
+Approach:
+
+- Use backtracking to generate all possible partitions.
+- Check if each substring is a palindrome before proceeding.
+
+```py
+def partition(s):
+    result = []
+
+    def is_palindrome(sub):
+        return sub == sub[::-1]
+
+    def backtrack(start, current):
+        if start == len(s):
+            result.append(current[:])
+            return
+
+        for end in range(start + 1, len(s) + 1):
+            if is_palindrome(s[start:end]):
+                current.append(s[start:end])
+                backtrack(end, current)
+                current.pop()
+
+    backtrack(0, [])
+    return result
+
+print(partition("aab"))  # Output: [['a', 'a', 'b'], ['aa', 'b']]
+
+```
+
+**Hamiltonian Path**
+
+Problem: Determine if a Hamiltonian path (visiting each vertex exactly once) exists in a graph.
+
+Approach:
+
+- Use backtracking to explore all paths, marking vertices as visited and restoring them during backtracking.
+
+```py
+def hamiltonian_path(graph, start):
+    n = len(graph)
+    visited = [False] * n
+
+    def backtrack(path):
+        if len(path) == n:  # All vertices visited
+            return True
+
+        for neighbor in range(n):
+            if graph[path[-1]][neighbor] == 1 and not visited[neighbor]:
+                visited[neighbor] = True
+                path.append(neighbor)
+                if backtrack(path):
+                    return True
+                path.pop()
+                visited[neighbor] = False
+
+        return False
+
+    visited[start] = True
+    return backtrack([start])
+
+graph = [[0, 1, 1, 0], [1, 0, 1, 1], [1, 1, 0, 1], [0, 1, 1, 0]]
+print(hamiltonian_path(graph, 0))  # Output: True
+
+```
