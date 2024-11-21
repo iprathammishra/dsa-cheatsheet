@@ -254,3 +254,236 @@ k = 2
 print(subarrays_with_k_distinct(nums, k))
 
 ```
+
+Here are some patterns to take a look for revision.
+
+**Running Sum of 1D Array**
+
+Problem: Given an array, return a new array where each element is the sum of all previous elements, including itself.
+
+Approach:
+
+- Use a single traversal and maintain a running sum. Update each element by adding it to the cumulative sum so far.
+
+```py
+def runningSum(nums):
+    for i in range(1, len(nums)):
+        nums[i] += nums[i - 1]
+    return nums
+
+```
+
+**Find Pivot Index**
+
+Problem: Find the index where the sum of elements on its left equals the sum on its right.
+
+Approach:
+
+- Use the total sum and calculate the left sum as you iterate. The right sum is `total - leftSum - nums[i]`.
+
+```py
+def pivotIndex(nums):
+    total = sum(nums)
+    leftSum = 0
+    for i, num in enumerate(nums):
+        if leftSum == total - leftSum - num:
+            return i
+        leftSum += num
+    return -1
+
+```
+
+**Subarray Sum Equals K**
+
+Problem: Find the total number of continuous subarrays that sum to k.
+
+Approach:
+
+- Use a dictionary to store the prefix sums. For each prefix sum, check if (prefixSum - k) exists, indicating a subarray that sums to k.
+
+```py
+def subarraySum(nums, k):
+    count = 0
+    prefixSum = 0
+    prefixMap = {0: 1}
+    for num in nums:
+        prefixSum += num
+        count += prefixMap.get(prefixSum - k, 0)
+        prefixMap[prefixSum] = prefixMap.get(prefixSum, 0) + 1
+    return count
+
+```
+
+**Find the Longest Subarray with Equal 0s and 1s**
+
+Problem: Replace 0 with -1 and find the longest subarray with a sum of 0.
+
+Approach:
+
+- Use a prefix sum and a hash map to store the first occurrence of each prefix sum. If a prefix sum repeats, the subarray between these indices has a sum of 0.
+
+```py
+def findMaxLength(nums):
+    prefixMap = {0: -1}
+    maxLength = 0
+    prefixSum = 0
+    for i, num in enumerate(nums):
+        prefixSum += 1 if num == 1 else -1
+        if prefixSum in prefixMap:
+            maxLength = max(maxLength, i - prefixMap[prefixSum])
+        else:
+            prefixMap[prefixSum] = i
+    return maxLength
+
+```
+
+**Range Sum Query - Immutable**
+
+Problem: Given an array, calculate the sum of elements in a given range multiple times.
+
+Approach:
+
+- Precompute the prefix sum array. The sum of any range `[i, j]` is `prefix[j + 1] - prefix[i]`.
+
+```py
+class NumArray:
+    def __init__(self, nums):
+        self.prefix = [0]
+        for num in nums:
+            self.prefix.append(self.prefix[-1] + num)
+
+    def sumRange(self, i, j):
+        return self.prefix[j + 1] - self.prefix[i]
+
+```
+
+**Minimum Size Subarray Sum**
+
+Problem: Find the minimal length of a subarray whose sum is greater than or equal to s.
+
+Approach:
+
+- Use a sliding window approach combined with the prefix sum to calculate sums on the fly and minimize the window size.
+
+```py
+def minSubArrayLen(target, nums):
+    left = 0
+    currentSum = 0
+    minLength = float('inf')
+    for right in range(len(nums)):
+        currentSum += nums[right]
+        while currentSum >= target:
+            minLength = min(minLength, right - left + 1)
+            currentSum -= nums[left]
+            left += 1
+    return minLength if minLength != float('inf') else 0
+
+```
+
+**Maximum Sum Rectangle in a 2D Matrix**
+
+Problem: Find the submatrix with the maximum sum in a 2D matrix.
+
+Approach:
+
+- Use a prefix sum for rows and reduce the problem to a 1D maximum subarray sum using Kadane's algorithm.
+
+```py
+def maxSumRectangle(matrix):
+    rows, cols = len(matrix), len(matrix[0])
+    maxSum = float('-inf')
+    for top in range(rows):
+        temp = [0] * cols
+        for bottom in range(top, rows):
+            for col in range(cols):
+                temp[col] += matrix[bottom][col]
+            maxSum = max(maxSum, kadane(temp))
+    return maxSum
+
+def kadane(arr):
+    maxSum = float('-inf')
+    currentSum = 0
+    for num in arr:
+        currentSum = max(num, currentSum + num)
+        maxSum = max(maxSum, currentSum)
+    return maxSum
+
+```
+
+**Count Range Sum**
+
+Problem: Count the number of subarrays with sums in a given range [lower, upper].
+
+Approach:
+
+- Use a prefix sum and a sorted list to count valid subarrays using binary search.
+
+```py
+from sortedcontainers import SortedList
+def countRangeSum(nums, lower, upper):
+    prefixSum = 0
+    sortedList = SortedList([0])
+    count = 0
+    for num in nums:
+        prefixSum += num
+        count += sortedList.bisect_right(prefixSum - lower) - sortedList.bisect_left(prefixSum - upper)
+        sortedList.add(prefixSum)
+    return count
+
+```
+
+**Maximum Sum of Two Non-Overlapping Subarrays**
+
+Problem: Find two non-overlapping subarrays with the maximum sum.
+
+Approach:
+
+- Use prefix sums to precompute sums for subarrays and track the best left and right subarray sums.
+
+```py
+def maxSumTwoNoOverlap(nums, firstLen, secondLen):
+    def maxSum(L, M):
+        prefix = [0] * (len(nums) + 1)
+        for i in range(len(nums)):
+            prefix[i + 1] = prefix[i] + nums[i]
+        maxL = maxM = res = 0
+        for i in range(L + M, len(prefix)):
+            maxL = max(maxL, prefix[i - M] - prefix[i - M - L])
+            res = max(res, maxL + prefix[i] - prefix[i - M])
+        return res
+    return max(maxSum(firstLen, secondLen), maxSum(secondLen, firstLen))
+
+```
+
+**Split Array into Subarrays with Maximum Sum**
+
+Problem: Split an array into m subarrays such that the largest sum among them is  minimized.
+
+Approach:
+
+- Use binary search on the result (minimum possible largest sum). For each mid, check if the split is feasible using prefix sums.
+
+```py
+def splitArray(nums, m):
+    def canSplit(maxSum):
+        count = 1
+        currentSum = 0
+        for num in nums:
+            currentSum += num
+            if currentSum > maxSum:
+                count += 1
+                currentSum = num
+                if count > m:
+                    return False
+        return True
+    left, right = max(nums), sum(nums)
+    while left < right:
+        mid = (left + right) // 2
+        if canSplit(mid):
+            right = mid
+        else:
+            left = mid + 1
+    return left
+
+```
+
