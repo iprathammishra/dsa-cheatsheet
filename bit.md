@@ -163,3 +163,222 @@ print(reverse_bits(43261596))
 
 
 ```
+
+Here are some of the best pattern to take a look for revision.
+
+**Check if a Number is Power of Two**
+
+Problem: Determine if a given integer is a power of two.
+
+Approach: 
+
+- A number that is a power of two has exactly one bit set in its binary representation.
+- `n & (n - 1)` removes the rightmost set bit. If the result is `0`, the number is a power of two.
+
+```py
+def isPowerOfTwo(n):
+    return n > 0 and (n & (n - 1)) == 0
+
+```
+
+**Count Set Bits**
+
+Problem: Count the numnber of 1 bit in the binary representation of a number.
+
+Approach: 
+
+- Use Brian Kernighan's algorithm: repeatedly perform `n = n & (n - 1)` until `n` becomes 0. Each operation removes one set bit.
+
+```py
+def countSetBits(n):
+    count = 0
+    while n:
+        n &= (n - 1)
+        count += 1
+    return count
+
+```
+
+**Find the Single Number**
+
+Problem: In an array where every number appears twize except one, find the single number.
+
+Approach:
+
+- Use XOR: `a ^ a = 0` and `a ^ 0 = a`. XOR all numbers; duplicates cancel out, leaving the unique number.
+
+```py
+def singleNumber(nums):
+    result = 0
+    for num in nums:
+        result ^= num
+    return result
+
+```
+
+**Reverse Bits**
+
+Problem: Reverse the bits of a given 32-bit integer.
+
+Approach:
+
+- Iterate through all 32 bits, extract the least significant bit, and shift it into its reversed position.
+
+```py
+def reverseBits(n):
+    result = 0
+    for i in range(32):
+        result = (result << 1) | (n & 1)
+        n >>= 1
+    return result
+
+```
+
+**Find Missing Number**
+
+Problem: Find the missing number in an array containing numbers from 0 to n.
+
+Approach:
+
+- XOR all numbers in the array and from 0 to n. The result is the missing number.
+
+```py
+def missingNumber(nums):
+    n = len(nums)
+    result = n
+    for i, num in enumerate(nums):
+        result ^= i ^ num
+    return result
+
+```
+
+**Maximum XOR of Two Numbers in an Array**
+
+Problem: Find the maximum XOR of two numbers in an array.
+
+Approach:
+
+- Use a trie to store binary representations of numbers.
+- For each number, try to maximize XOR by choosing the opposite bit at each level of the trie.
+
+```py
+class TrieNode:
+    def __init__(self):
+        self.children = {}
+
+def findMaximumXOR(nums):
+    root = TrieNode()
+    for num in nums:
+        node = root
+        for i in range(31, -1, -1):
+            bit = (num >> i) & 1
+            if bit not in node.children:
+                node.children[bit] = TrieNode()
+            node = node.children[bit]
+
+    max_xor = 0
+    for num in nums:
+        node = root
+        curr_xor = 0
+        for i in range(31, -1, -1):
+            bit = (num >> i) & 1
+            opposite_bit = 1 - bit
+            if opposite_bit in node.children:
+                curr_xor = (curr_xor << 1) | 1
+                node = node.children[opposite_bit]
+            else:
+                curr_xor = curr_xor << 1
+                node = node.children[bit]
+        max_xor = max(max_xor, curr_xor)
+    return max_xor
+
+```
+
+**Divide Two Integers Without Using Division**
+
+Problem: Implement division of two integers without using `/`, `*`, or `%`.
+
+Approach:
+
+- Use bit manipulation to perform subtraction and shifting.
+- Subtract the largest multiple of the divior from the divident by shifting the divisor left until it exceeds the dividend.
+
+```py
+def divide(dividend, divisor):
+    if dividend == -2**31 and divisor == -1:
+        return 2**31 - 1
+    sign = (dividend > 0) == (divisor > 0)
+    dividend, divisor = abs(dividend), abs(divisor)
+    result = 0
+    while dividend >= divisor:
+        temp, count = divisor, 1
+        while dividend >= (temp << 1):
+            temp <<= 1
+            count <<= 1
+        dividend -= temp
+        result += count
+    return result if sign else -result
+
+```
+
+**Subset XOR Sum**
+
+Problem: Find the sum of XOR values of all subsets of an array.
+
+Approach:
+
+- Each bit contributes to the XOR sum in `2^(n-1)` subsets. Multiply the count by the bit value for each bit position.
+
+```py
+def subsetXORSum(nums):
+    return sum(nums) * (1 << (len(nums) - 1))
+
+```
+
+**Find Two Missing Numbers**
+
+Problem: In an array of `n` integers from `1` to `n+2`, find the two missing numbers.
+
+Approach:
+
+- XOR all numbers from 1 to n+2 and all array elements to get `a^b` (the missing numbers).
+- Use a set bit in `a ^ b` to divide numbers into two groups and find a and b.
+
+```py
+def findTwoMissingNumbers(nums):
+    n = len(nums) + 2
+    xor_all = 0
+    for i in range(1, n + 1):
+        xor_all ^= i
+    for num in nums:
+        xor_all ^= num
+
+    diff_bit = xor_all & -xor_all
+    a = b = 0
+    for i in range(1, n + 1):
+        if i & diff_bit:
+            a ^= i
+        else:
+            b ^= i
+    for num in nums:
+        if num & diff_bit:
+            a ^= num
+        else:
+            b ^= num
+    return a, b
+
+```
+
+**Nim Game**
+
+Problem: Determine if the first player will win a Nim game with n stones.
+
+Approach:
+
+- If `n % 4 == 0`, the first player always loses. Otherwise, the first player can always leave a multiple of 4 for the opponent.
+
+```py
+def canWinNim(n):
+    return n % 4 != 0
+
+```
