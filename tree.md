@@ -595,3 +595,215 @@ def range_sum_bst(root, low, high):
 # print(range_sum_bst(root, 7, 15))  # Output: 32
 
 ```
+
+Here are some patterns to keep in mind. **Also make sure to read all the patterns from the DSA Goldmine folder.**
+
+**Maximum Depth of a Binary Tree**
+
+Problem: Find the maximum depth of a binary tree.
+
+Approach: Use recursion (DFS) to calculate the depth of the left and right subtrees and return the maximum of the two, adding 1 for the current level.
+
+```py
+def maxDepth(root):
+    if not root:
+        return 0
+    return 1 + max(maxDepth(root.left), maxDepth(root.right))
+
+```
+
+**Symmetric Tree**
+
+Problem: Check if a binary tree is symmetric.
+
+Approach: Use recursion to compare the left and right subtrees, ensuring they are mirror images.
+
+```py
+def isSymmetric(root):
+    def isMirror(t1, t2):
+        if not t1 and not t2:
+            return True
+        if not t1 or not t2:
+            return False
+        return t1.val == t2.val and isMirror(t1.left, t2.right) and isMirror(t1.right, t2.left)
+    return isMirror(root, root)
+
+```
+
+**Binary Tree Inorder Traversal**
+
+Problem: Perform an in-order traversal of a binary tree iteratively.
+
+Approach: Use a stack to traverse left children, visit the node, and then traverse the right subtree.
+
+```py
+def inorderTraversal(root):
+    stack, result = [], []
+    current = root
+    while stack or current:
+        while current:
+            stack.append(current)
+            current = current.left
+        current = stack.pop()
+        result.append(current.val)
+        current = current.right
+    return result
+
+```
+
+**Construct Binary Tree from Preorder and Inorder Traversal**
+
+Problem: Given preorder and inorder traversal arrays, contruct the binary tree.
+
+Approach: Use recursion, where the first element of the preorder array is the root, and the inorder array splits the left and right subtrees.
+
+```py
+def buildTree(preorder, inorder):
+    if not preorder or not inorder:
+        return None
+    root = TreeNode(preorder[0])
+    mid = inorder.index(preorder[0])
+    root.left = buildTree(preorder[1:mid+1], inorder[:mid])
+    root.right = buildTree(preorder[mid+1:], inorder[mid+1:])
+    return root
+
+```
+
+**Level Order Traversal**
+
+Problem: Perform a level-order traversal of a binary tree.
+
+Approach: Use a queue (BFS) to visit nodes level by level.
+
+```py
+from collections import deque
+def levelOrder(root):
+    if not root:
+        return []
+    result, queue = [], deque([root])
+    while queue:
+        level = []
+        for _ in range(len(queue)):
+            node = queue.popleft()
+            level.append(node.val)
+            if node.left:
+                queue.append(node.left)
+            if node.right:
+                queue.append(node.right)
+        result.append(level)
+    return result
+
+```
+
+**Serialize and Deserialize Binary Tree**
+
+Problem: Convert a binary tree into a string representaiton and back.
+
+Approach: Use level-order traversal for serialization and reconstruction and deserialization.
+
+```py
+from collections import deque
+class Codec:
+    def serialize(self, root):
+        if not root:
+            return ""
+        result, queue = [], deque([root])
+        while queue:
+            node = queue.popleft()
+            if node:
+                result.append(str(node.val))
+                queue.append(node.left)
+                queue.append(node.right)
+            else:
+                result.append("null")
+        return ",".join(result)
+
+    def deserialize(self, data):
+        if not data:
+            return None
+        nodes = data.split(",")
+        root = TreeNode(int(nodes[0]))
+        queue = deque([root])
+        i = 1
+        while queue:
+            node = queue.popleft()
+            if nodes[i] != "null":
+                node.left = TreeNode(int(nodes[i]))
+                queue.append(node.left)
+            i += 1
+            if nodes[i] != "null":
+                node.right = TreeNode(int(nodes[i]))
+                queue.append(node.right)
+            i += 1
+        return root
+
+```
+
+**Binary Tree Maximum Path Sum**
+
+Problem: Find the maximum path sum in a binary tree.
+
+Approach: Use recursion to calculate the maximum path sum from the left and right children, updating a global maximum.
+
+```py
+def maxPathSum(root):
+    max_sum = float('-inf')
+    def helper(node):
+        nonlocal max_sum
+        if not node:
+            return 0
+        left = max(helper(node.left), 0)
+        right = max(helper(node.right), 0)
+        max_sum = max(max_sum, left + right + node.val)
+        return max(left, right) + node.val
+    helper(root)
+    return max_sum
+
+```
+
+**Recover Binary Search Tree**
+
+Problem: Fix a BST where two nodes are swapped by mistake.
+
+Approach: Use an in-order traversal to identify the swapped nodes, then swap their values back.
+
+```py
+def recoverTree(root):
+    def inorder(node):
+        nonlocal first, second, prev
+        if not node:
+            return
+        inorder(node.left)
+        if prev and node.val < prev.val:
+            if not first:
+                first = prev
+            second = node
+        prev = node
+        inorder(node.right)
+
+    first = second = prev = None
+    inorder(root)
+    first.val, second.val = second.val, first.val
+
+```
+
+**Kth Smallest Element in a BST**
+
+Problem: Find the Kth smallest element in a BST.
+
+Approach: Performm an in-order traversal, which produces sorted elements, and pick the kth element.
+
+```py
+def kthSmallest(root, k):
+    stack = []
+    while True:
+        while root:
+            stack.append(root)
+            root = root.left
+        root = stack.pop()
+        k -= 1
+        if k == 0:
+            return root.val
+        root = root.right
+
+```
