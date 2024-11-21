@@ -742,3 +742,405 @@ prices = [1, 3, 2, 8, 4, 9]
 fee = 2
 print(max_profit_with_fee(prices, fee))
 ```
+
+Here are some patterns and their approaches to visit to revision.
+
+**Fibonacci Number**
+
+Problem: Compute the nth Fibonacci number.
+
+Pattern: Classic recursion + memoization.
+
+Approach:
+
+- Use an array (or two variables) to store previously computed Fibonacci numbers.
+- Start with base cases (`fib(0) = 0)`, `fib(1) = 1`).
+- Build up to the nth Fibonacci using `fib(n) = fib(n-1) + fib(n-2)`.
+
+```py
+def fibonacci(n):
+    if n <= 1:
+        return n
+    dp = [0] * (n + 1)
+    dp[1] = 1
+    for i in range(2, n + 1):
+        dp[i] = dp[i - 1] + dp[i - 2]
+    return dp[n]
+
+```
+
+**Climbing Stairs**
+
+Problem: Find the number of distinct ways to climb n stairs, taking 1 or 2 steps at a time.
+
+Pattern: Subproblems depend on 1 or 2 previous steps.
+
+Approach:
+
+- Define `dp[i]` as the number of ways to climb `i` stairs.
+- Use `dp[i] = dp[i-1] + dp[i-2]`.
+
+```py
+def climbStairs(n):
+    if n <= 2:
+        return n
+    dp = [0] * (n + 1)
+    dp[1], dp[2] = 1, 2
+    for i in range(3, n + 1):
+        dp[i] = dp[i - 1] + dp[i - 2]
+    return dp[n]
+
+```
+
+**Minimum Path Sum**
+
+Problem: Find the minimum sum path from the top-left to the bottom-right in a grid.
+
+Pattern: Grid traversal with overlapping subproblems.
+
+Approach:
+
+- Define `dp[i][j]` as the minimum path sum to cell (i, j).
+- Use `dp[i][j] = grid[i][j] + min(dp[i-1][j], dp[i][j-1])`.
+
+```py
+def minPathSum(grid):
+    rows, cols = len(grid), len(grid[0])
+    for i in range(rows):
+        for j in range(cols):
+            if i == 0 and j == 0:
+                continue
+            elif i == 0:
+                grid[i][j] += grid[i][j - 1]
+            elif j == 0:
+                grid[i][j] += grid[i - 1][j]
+            else:
+                grid[i][j] += min(grid[i - 1][j], grid[i][j - 1])
+    return grid[-1][-1]
+
+```
+
+**House Robber**
+
+Problem: Maximize the sum of values in a list while skipping adjacent elements.
+
+Pattern: Non-adjacent sum optimization.
+
+Approach: Use `dp[i] = max(dp[i-1], nums[i] + dp[i-2])`.
+
+```py
+def rob(nums):
+    if not nums:
+        return 0
+    if len(nums) == 1:
+        return nums[0]
+    dp = [0] * len(nums)
+    dp[0], dp[1] = nums[0], max(nums[0], nums[1])
+    for i in range(2, len(nums)):
+        dp[i] = max(dp[i-1], nums[i] + dp[i-2])
+    return dp[-1]
+
+```
+
+**Coin Change (Combinations)**
+
+Problem: Count the number of ways to make a target amount using given coin denominations.
+
+Pattern: Unbounded knapsack.
+
+Approach:
+
+- Define `dp[i]` as the number of ways to make sum i.
+- Use `dp[i] += dp[i-coin]` for each coin.
+
+```py
+def coinChangeCombinations(coins, amount):
+    dp = [0] * (amount + 1)
+    dp[0] = 1
+    for coin in coins:
+        for i in range(coin, amount + 1):
+            dp[i] += dp[i - coin]
+    return dp[amount]
+
+```
+
+**Longest Increasing Subsequence**
+
+Problem: Find the length of the longest subsequence in increasing order.
+
+Pattern: 1D DP with binary search.
+
+Approach:
+
+- Use an array dp where dp[i] stores the smallest ending value of a subsequence of length i+1.
+
+```py
+def lengthOfLIS(nums):
+    dp = []
+    for num in nums:
+        i = bisect_left(dp, num)
+        if i == len(dp):
+            dp.append(num)
+        else:
+            dp[i] = num
+    return len(dp)
+
+```
+
+**Partition Equal Subset Sum**
+
+Problem: Determine if an array can be partitioned into two subsets with equal sums.
+
+Pattern: Subset sum optimization.
+
+Approach:
+
+- Calculate the total sum of the array. If it's odd, return False.
+- Use a DP array (dp[i]) to determine if a subset with sum j is possible.
+- Transition: `dp[j] = dp[j] or dp[j - num]`.
+
+```py
+def canPartition(nums):
+    total_sum = sum(nums)
+    if total_sum % 2 != 0:
+        return False
+    target = total_sum // 2
+    dp = [False] * (target + 1)
+    dp[0] = True
+    for num in nums:
+        for j in range(target, num - 1, -1):
+            dp[j] = dp[j] or dp[j - num]
+    return dp[target]
+
+```
+
+**Unique Paths**
+
+Problem: Count all unique paths in an m x n grid, moving only down or right.
+
+Pattern: Grid traversal with combinatorics.
+
+Approach:
+
+- Define `dp[i][j]` as the number of unique paths to call (i, j).
+- Transition: `dp[i][j] = dp[i-1][j] + dp[i][j-1]`.
+
+```py
+def uniquePaths(m, n):
+    dp = [[1] * n for _ in range(m)]
+    for i in range(1, m):
+        for j in range(1, n):
+            dp[i][j] = dp[i-1][j] + dp[i][j-1]
+    return dp[-1][-1]
+
+```
+
+**Edit Distance**
+
+Problem: Find the minimum number of operations (insert, delete, replace) to convert one string into another.
+
+Pattern: String manipulation with 2D DP.
+
+Approach:
+
+- Define `dp[i][j]` as the minimum edits to convert the first i characters to word1 to the first j characters to word2.
+- Transition:
+    - If characters match: `dp[i][j] = dp[i-1][j-1]`.
+    - Otherwise: `dp[i][j] = 1 + min(dp[i-1][j], dp[i][j-1], dp[i-1][j-1])`.
+
+```py
+def minDistance(word1, word2):
+    m, n = len(word1), len(word2)
+    dp = [[0] * (n + 1) for _ in range(m + 1)]
+    for i in range(m + 1):
+        for j in range(n + 1):
+            if i == 0:
+                dp[i][j] = j
+            elif j == 0:
+                dp[i][j] = i
+            elif word1[i - 1] == word2[j - 1]:
+                dp[i][j] = dp[i - 1][j - 1]
+            else:
+                dp[i][j] = 1 + min(dp[i - 1][j], dp[i][j - 1], dp[i - 1][j - 1])
+    return dp[m][n]
+
+```
+
+**Longest Palindromic Subsequence**
+
+Problem: Find the length of the longest subsequence in a string that is a palindrome.
+
+Pattern: Reverse-and-compare strategy with 2D DP.
+
+Approach:
+
+- Define `dp[i][j]` as the length of the longest palindromic subsequence between indices i and j.
+- Transition:
+    - If `s[i] == s[j]`: `dp[i][j] = dp[i+1][j-1] + 2`.
+    - Else: `dp[i][j] = max(dp[i+1][j], dp[i][j-1])`.
+
+```py
+def longestPalindromeSubseq(s):
+    n = len(s)
+    dp = [[0] * n for _ in range(n)]
+    for i in range(n - 1, -1, -1):
+        dp[i][i] = 1
+        for j in range(i + 1, n):
+            if s[i] == s[j]:
+                dp[i][j] = dp[i + 1][j - 1] + 2
+            else:
+                dp[i][j] = max(dp[i + 1][j], dp[i][j - 1])
+    return dp[0][-1]
+
+```
+
+**Burst Ballons**
+
+Problem: Maximize coins by bursting balloons wisely.
+
+Pattern: Interval DP.
+
+Approach:
+
+- Define `dp[i][j]` as the maximum coins for bursting balloons between indices i and j.
+- For each subinterval [i, j], consider each balloons k as the last one to burst.
+- Transition: `dp[i][j] = max(dp[i][k-1] + dp[k+1][j] + nums[i-1]*nums[k]*nums[j+1])`.
+
+```py
+def maxCoins(nums):
+    nums = [1] + nums + [1]
+    n = len(nums)
+    dp = [[0] * n for _ in range(n)]
+    for length in range(2, n):
+        for i in range(0, n - length):
+            j = i + length
+            for k in range(i + 1, j):
+                dp[i][j] = max(dp[i][j], nums[i] * nums[k] * nums[j] + dp[i][k] + dp[k][j])
+    return dp[0][-1]
+
+```
+
+**Matrix Chain Multiplication**
+
+Problem: Find the minimum number of multiplications needed to multiply a sequence of matrices.
+
+Pattern: Parenthesis grouping optimization.
+
+Approach:
+
+- Define `dp[i][j]` as the minimum multiplication for multiplying matrices from i to j.
+- Transition: `dp[i][j] = min(dp[i][k] + dp[k+1][j] + dimensions[i-1]*dimensions[k]*dimensions[j])`.
+
+```py
+def matrixChainOrder(dimensions):
+    n = len(dimensions) - 1
+    dp = [[0] * n for _ in range(n)]
+    for length in range(2, n + 1):
+        for i in range(n - length + 1):
+            j = i + length - 1
+            dp[i][j] = float('inf')
+            for k in range(i, j):
+                cost = dp[i][k] + dp[k+1][j] + dimensions[i]*dimensions[k+1]*dimensions[j+1]
+                dp[i][j] = min(dp[i][j], cost)
+    return dp[0][-1]
+
+```
+
+**Work Break**
+
+Problem: Check if a string can be segmented into words from a given dictionary.
+
+Pattern: String segmentation with overlapping subproblems.
+
+Approach:
+
+- Define dp[i] as True if the substring `s[0:i]` can be segmented into valid words.
+- Transition: For every substring `s[j:i]`, check if it exists in the dictionary and dp[j] is True.
+
+```py
+def wordBreak(s, wordDict):
+    word_set = set(wordDict)
+    dp = [False] * (len(s) + 1)
+    dp[0] = True
+    for i in range(1, len(s) + 1):
+        for j in range(i):
+            if dp[j] and s[j:i] in word_set:
+                dp[i] = True
+                break
+    return dp[-1]
+
+```
+
+**Wildcard Matching**
+
+Problem: Match a string with a pattern containing wildcards * (matches any sequence) and ? (matches any single character).
+
+Pattern: Advanced string DP.
+
+Approach:
+
+- Define `dp[i][j]` as True if the first i characters of the string match the first j characters of the pattern.
+- Transition:
+    - If `p[j-1] == s[i-1] or p[j-1] == '?'`: `dp[i][j] = dp[i-1][j-1]`.
+    - If `p[j-1] == '*'`: `dp[i][j] = dp[i-1][j] or dp[i][j-1]`.
+
+```py
+def isMatch(s, p):
+    m, n = len(s), len(p)
+    dp = [[False] * (n + 1) for _ in range(m + 1)]
+    dp[0][0] = True
+    for j in range(1, n + 1):
+        if p[j-1] == '*':
+            dp[0][j] = dp[0][j-1]
+    for i in range(1, m + 1):
+        for j in range(1, n + 1):
+            if p[j-1] == s[i-1] or p[j-1] == '?':
+                dp[i][j] = dp[i-1][j-1]
+            elif p[j-1] == '*':
+                dp[i][j] = dp[i-1][j] or dp[i][j-1]
+    return dp[m][n]
+
+```
+
+**Maximum Profit in Job Scheduling**
+
+Problem: Given jobs with start times, end times, and profits, find the maximum profit you can earn by scheduling non-overlapping jobs.
+
+Pattern: Weighted interval scheduling with DP.
+
+Approach:
+
+- Sort jobs by their end times.
+- Use binary search to find the last non-overlapping job for each job.
+- Define `dp[i]` as the maximum profit using the first i jobs.
+- Transition: `dp[i] = max(dp[i-1], profit[i-1] + dp[last_non_overlapping_job])`.
+
+```py
+def jobScheduling(startTime, endTime, profit):
+    jobs = sorted(zip(startTime, endTime, profit), key=lambda x: x[1])
+    n = len(jobs)
+    dp = [0] * (n + 1)
+    
+    def binary_search(index):
+        low, high = 0, index - 1
+        while low <= high:
+            mid = (low + high) // 2
+            if jobs[mid][1] <= jobs[index][0]:
+                if jobs[mid + 1][1] <= jobs[index][0]:
+                    low = mid + 1
+                else:
+                    return mid
+            else:
+                high = mid - 1
+        return -1
+
+    for i in range(1, n + 1):
+        include_profit = jobs[i - 1][2]
+        last_index = binary_search(i - 1)
+        if last_index != -1:
+            include_profit += dp[last_index + 1]
+        dp[i] = max(dp[i - 1], include_profit)
+
+    return dp[-1]
+
+```
