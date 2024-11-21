@@ -330,3 +330,9 @@ s = "abbaca"
 print(remove_adjacent_duplicates(s))  # Output: "ca"
 
 ```
+
+Here are some patterns to look after later.
+
+
+
+
