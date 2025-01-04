@@ -2,26 +2,26 @@
 
 Don't forget to solve these questions:
 1. State Machine.
- - Climbing Stairs
- - Best Time to Buy and Sell Stock (series)
- - House Robber (series)
- - Target Sum
- - Count number of subsets with given difference
- - Delete and Earn
- - Jump Game (series)
- - Edit Distance
+  - Climbing Stairs
+  - Best Time to Buy and Sell Stock (series)
+  - House Robber (series)
+  - Target Sum
+  - Count number of subsets with given difference
+  - Delete and Earn
+  - Jump Game (series)
+  - Edit Distance
 2. Bounded and Un-Bounded Knapsack.
- - Coin Change (series)
- - Rod Cutting
+  - Coin Change (series)
+  - Rod Cutting
 3. Partitions.
- - Partition Equal Subset Sum
+  - Partition Equal Subset Sum
 4. Trivial/Classic.
- - Fibonacci Series
- - Best Time to Buy and Sell Stock
- - Longest Increasing Subsequence (tab)
+  - Fibonacci Series
+  - Best Time to Buy and Sell Stock
+  - Longest Increasing Subsequence (tab)
 5. Subsequence/Substring/Possibilities/Min/Max.
- - Longest Common Subsequence
- - Longest Palindrome (substring, subsequence)
+  - Longest Common Subsequence
+  - Longest Palindrome (substring, subsequence)
 
 ## Fibonacci Numbers
 
