@@ -1,5 +1,19 @@
 # Backtracking
 
+For Backtracking and Recursion don't forget to solve these questions:
+1. Rat in a Maze
+2. Combination Sum I and II
+3. N-queens
+4. Letter combination of a phone number
+5. Subsets I and II
+6. Word search
+7. Validate BST
+8. Binary Tree Maximum path sum
+9. Find all paths from SRC to TAR in graph
+10. Number of islands
+11. Find if path exists in graph
+12. is Graph Bipartite
+
 ## Permutations
 
 (Permutations)
