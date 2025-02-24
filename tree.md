@@ -1,5 +1,24 @@
 # Tree
 
+### Tree implementation using Arrays (`i/2`, `2i` and `2i+1` concept for Parent Node & Left and Right Childern Nodes).
+
+Consider you have this lame tree below:
+```
+        10
+       /  \
+      5    15
+     / \   / \
+    3   7 12 18
+   / \   \
+  1   4   8
+
+```
+Let's assume we have given an array representing this tree; something like that: 10 5 15 3 7 12 18 1 4 N 8 N N N N. Now, make sure you consider this array `1-indexed` this is really important.
+
+Here at `1-index` value is **10** and at `5-index` value is **7** and at `12-index` it is **N** (Null). To construct a tree out of this is really easy. For a given `i` that is the index (1-indexed); the **left child** of this iteration **will be 2i** and the **right child is 2i + 1**. Similarly, if we need to find the **parent of a node at i-index** we can find it by **i/2**. Let's understand this with an example.
+
+Suppose we need to find the left and right child of the node at index 3. We know that the node at index 3 is 15. So, the left child of the node at index 3 should be at 2i index i.e., 3*2 = 6-index i.e., 12- correct and the right child should be at 2i + 1 index i.e., 7-index i.e., 18- correct and the parent of the node at 3/2 = 1- index i.e., 10- correct. `That is the concept of i/2, 2i and 2i+1 for parent, left child and right child of a node in a tree.`
+
 ## Depth-First Traversals
 
 (Preorder Traversal)
